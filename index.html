@@ -341,6 +341,62 @@ footer{padding:25px 0;color:#777;font-size:10px}
 }
 </style>
 
+
+<style id="mobile-circular-glow-particles">
+@media (max-width: 760px) {
+  .welcome-hero {
+    isolation: isolate;
+  }
+  .welcome-hero::before {
+    width: 112vw !important;
+    height: 112vw !important;
+    max-width: 620px !important;
+    max-height: 620px !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle,
+      rgba(91,174,190,.17) 0%,
+      rgba(70,143,160,.12) 28%,
+      rgba(51,111,130,.07) 48%,
+      rgba(35,78,95,.025) 65%,
+      transparent 76%) !important;
+    filter: blur(30px) !important;
+    pointer-events: none !important;
+  }
+  .welcome-hero::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 58vw;
+    height: 58vw;
+    max-width: 310px;
+    max-height: 310px;
+    top: 5%;
+    right: -13%;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+      rgba(83,164,181,.14) 0%,
+      rgba(68,139,157,.08) 36%,
+      rgba(48,105,125,.035) 58%,
+      transparent 74%);
+    filter: blur(24px);
+    pointer-events: none;
+  }
+}
+</style>
+
+
+<style id="mobile-work-swipe">
+@media (max-width: 760px) {
+  .work-stage {
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  /* The embedded page is a visual preview on phones; let touch gestures reach the carousel. */
+  .work-stage iframe { pointer-events: none; }
+}
+</style>
+
 </head><body>
 <div class="nav-shell"><div class="wrap nav"><a class="brand" href="#home"><span class="mark">AS</span> ARIQ.ABRAR</a><nav><a href="#about">About</a><a href="#journey">Journey</a><a href="#work">Work</a><a href="#skills">Skills</a><a href="#awards">Awards</a><a href="#contact">Contact</a></nav><a class="hire" href="mailto:ariqabrarsofyan@mail.ugm.ac.id">Hire Me</a></div></div>
 <main class="wrap" id="home">
@@ -624,6 +680,30 @@ html.js-motion .motion-reveal.is-visible{opacity:1;transform:translateY(0)}
  });
  const gallery=document.querySelector('.work-stage');
  if(gallery){
+  let touchStartX=0;
+  let touchStartY=0;
+  let touchMoved=false;
+  gallery.addEventListener('touchstart',event=>{
+   if(!event.touches || event.touches.length!==1)return;
+   touchStartX=event.touches[0].clientX;
+   touchStartY=event.touches[0].clientY;
+   touchMoved=false;
+   stopAutoplay();
+  },{passive:true});
+  gallery.addEventListener('touchmove',event=>{
+   if(!event.touches || event.touches.length!==1)return;
+   const dx=event.touches[0].clientX-touchStartX;
+   const dy=event.touches[0].clientY-touchStartY;
+   if(Math.abs(dx)>12 && Math.abs(dx)>Math.abs(dy))touchMoved=true;
+  },{passive:true});
+  gallery.addEventListener('touchend',event=>{
+   if(!touchMoved){startAutoplay();return;}
+   const endX=event.changedTouches && event.changedTouches[0] ? event.changedTouches[0].clientX : touchStartX;
+   const dx=endX-touchStartX;
+   if(Math.abs(dx)>38)move(dx<0?1:-1);
+   startAutoplay();
+  },{passive:true});
+  gallery.addEventListener('touchcancel',startAutoplay,{passive:true});
   gallery.addEventListener('mouseenter',stopAutoplay);
   gallery.addEventListener('mouseleave',startAutoplay);
   gallery.addEventListener('focusin',stopAutoplay);
