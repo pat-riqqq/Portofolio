@@ -255,6 +255,82 @@ footer{padding:25px 0;color:#777;font-size:10px}
 }
 </style>
 
+
+<style id="mobile-work-gallery-fit">
+@media (max-width: 760px) {
+  .work-gallery { overflow: hidden; }
+  .work-gallery .section-head { margin-bottom: 10px; }
+  .work-gallery .section-title {
+    font-size: clamp(30px, 8vw, 40px);
+    line-height: 1.08;
+    letter-spacing: -1.2px;
+  }
+  .work-gallery .section-note {
+    font-size: 14px;
+    line-height: 1.55;
+    max-width: 100%;
+  }
+  .work-stage {
+    height: 250px;
+    margin: 14px -4px 4px;
+    overflow: visible;
+  }
+  .work-track { width: 100%; }
+  .work-active {
+    width: min(84vw, 430px);
+    height: 190px;
+    border-radius: 16px;
+  }
+  .work-side {
+    width: min(72vw, 360px);
+    height: 158px;
+    border-radius: 15px;
+    opacity: .42;
+    filter: brightness(.72) saturate(.82);
+  }
+  .work-left { transform: translateX(-84%) rotateY(15deg) scale(.84); }
+  .work-right { transform: translateX(84%) rotateY(-15deg) scale(.84); }
+  .browser-frame { border-radius: 16px; }
+  .browser-top { height: 27px; }
+  .browser-screen { height: calc(100% - 27px); }
+  .work-mini-art { padding: 20px; }
+  .work-mini-art strong {
+    font-size: clamp(23px, 6vw, 30px);
+    margin: 14px 0 8px;
+  }
+  .work-caption {
+    margin: 10px auto 0;
+    padding: 0 10px;
+  }
+  .work-caption-kicker {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    line-height: 1.6;
+  }
+  .work-caption h4 {
+    font-size: clamp(21px, 5.8vw, 27px);
+    line-height: 1.2;
+    margin: 8px 0;
+  }
+  .work-caption p {
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .work-project-link {
+    margin-top: 14px;
+    padding: 9px 15px;
+    font-size: 12px;
+  }
+  .work-other-projects { margin-top: 34px; }
+}
+@media (max-width: 390px) {
+  .work-stage { height: 228px; }
+  .work-active { height: 174px; width: 85vw; }
+  .work-side { height: 146px; }
+  .work-caption h4 { font-size: 21px; }
+}
+</style>
+
 </head><body>
 <div class="nav-shell"><div class="wrap nav"><a class="brand" href="#home"><span class="mark">AS</span> ARIQ.ABRAR</a><nav><a href="#about">About</a><a href="#journey">Journey</a><a href="#work">Work</a><a href="#skills">Skills</a><a href="#awards">Awards</a><a href="#contact">Contact</a></nav><a class="hire" href="mailto:ariqabrarsofyan@mail.ugm.ac.id">Hire Me</a></div></div>
 <main class="wrap" id="home">
