@@ -39,9 +39,12 @@ footer{padding:25px 0;color:#777;font-size:10px}
 .work-track{position:relative;width:min(100%,980px);height:100%;display:flex;align-items:center;justify-content:center}
 .work-slide{position:absolute;transition:transform .7s cubic-bezier(.2,.75,.2,1),opacity .7s ease,filter .7s ease;will-change:transform,opacity;overflow:hidden}
 .work-active{z-index:3;width:min(58vw,590px);height:300px;opacity:1;transform:translateX(0) rotateY(0) scale(1);filter:none}
-.work-side{z-index:1;width:min(47vw,470px);height:245px;opacity:.34;filter:brightness(.58) saturate(.75);pointer-events:none}
+.work-side{z-index:1;width:min(47vw,470px);height:245px;opacity:.48;filter:brightness(.68) saturate(.82);pointer-events:auto;cursor:pointer}
 .work-left{transform:translateX(-72%) rotateY(22deg) scale(.88)}
 .work-right{transform:translateX(72%) rotateY(-22deg) scale(.88)}
+.work-side:hover{opacity:.72;filter:brightness(.86) saturate(.95)}
+.work-slide:focus-visible{outline:2px solid var(--gold,#E8C66F);outline-offset:5px}
+.work-active{cursor:default}
 .browser-frame{height:100%;width:100%;background:#f7f8fa;border:1px solid #ddd;border-radius:19px;overflow:hidden;box-shadow:0 28px 85px #0009}
 .browser-top{height:35px;background:#f5f5f5;border-bottom:1px solid #ddd;display:flex;align-items:center;gap:12px;padding:0 13px;color:#555}
 .browser-dots{display:flex;gap:5px}.browser-dots i{width:7px;height:7px;border-radius:50%;background:#c9c9c9}
@@ -82,7 +85,7 @@ footer{padding:25px 0;color:#777;font-size:10px}
 @media(max-width:760px){
  .work-stage{height:285px;margin-top:20px}
  .work-active{width:82vw;height:205px}
- .work-side{width:72vw;height:165px;opacity:.2}
+ .work-side{width:72vw;height:165px;opacity:.38;filter:brightness(.72) saturate(.85)}
  .work-left{transform:translateX(-82%) rotateY(17deg) scale(.83)}
  .work-right{transform:translateX(82%) rotateY(-17deg) scale(.83)}
  .work-arrow{
@@ -327,9 +330,8 @@ footer{padding:25px 0;color:#777;font-size:10px}
   </div>
 
   <div class="work-stage" aria-label="Featured project showcase">
-    <button class="work-arrow work-prev" type="button" aria-label="Previous project">‹</button>
     <div class="work-track">
-      <article class="work-slide work-side work-left" data-project="uav">
+      <article class="work-slide work-side work-left" data-project="uav" role="button" tabindex="0" aria-label="Show UAV-Based Methane Leak Detection project">
         <div class="work-mini-art uav-art">
           <span class="mini-kicker">ENERGY INNOVATION · 2026</span>
           <div class="uav-orbit"></div><div class="uav-drone">✣</div>
@@ -338,7 +340,7 @@ footer{padding:25px 0;color:#777;font-size:10px}
         </div>
       </article>
 
-      <article class="work-slide work-active" data-project="projectbridge">
+      <article class="work-slide work-active" data-project="projectbridge" role="button" tabindex="0" aria-label="ProjectBridge project, currently selected">
         <div class="browser-frame">
           <div class="browser-top">
             <div class="browser-dots"><i></i><i></i><i></i></div>
@@ -363,7 +365,7 @@ footer{padding:25px 0;color:#777;font-size:10px}
         </div>
       </article>
 
-      <article class="work-slide work-side work-right" data-project="chemical">
+      <article class="work-slide work-side work-right" data-project="chemical" role="button" tabindex="0" aria-label="Show Chemical Engineering project">
         <div class="work-mini-art chemical-art">
           <span class="mini-kicker">ACADEMIC FOUNDATION · ONGOING</span>
           <div class="chem-orbit orbit-one"></div><div class="chem-orbit orbit-two"></div>
@@ -371,12 +373,6 @@ footer{padding:25px 0;color:#777;font-size:10px}
           <small>Research · Process · Energy</small>
         </div>
       </article>
-    </div>
-    <button class="work-arrow work-next" type="button" aria-label="Next project">›</button>
-    <div class="work-pagination" aria-label="Project navigation">
-      <button class="work-dot active" type="button" aria-label="ProjectBridge"></button>
-      <button class="work-dot" type="button" aria-label="UAV methane detection"></button>
-      <button class="work-dot" type="button" aria-label="Chemical Engineering"></button>
     </div>
   </div>
 
@@ -492,7 +488,6 @@ html.js-motion .motion-reveal.is-visible{opacity:1;transform:translateY(0)}
  const slideMap=[...document.querySelectorAll('.work-slide')];
  const slideOrder=['projectbridge','uav','chemical'];
  const slides=slideOrder.map(id=>slideMap.find(slide=>slide.dataset.project===id)).filter(Boolean);
- const dots=[...document.querySelectorAll('.work-dot')];
  const title=document.getElementById('workProjectTitle');
  const desc=document.getElementById('workProjectDescription');
  const link=document.getElementById('workProjectLink');
@@ -512,7 +507,7 @@ html.js-motion .motion-reveal.is-visible{opacity:1;transform:translateY(0)}
    slide.classList.toggle('work-side',offset!==0);
    slide.style.zIndex=offset===0?'3':'1';
   });
-  dots.forEach((dot,i)=>dot.classList.toggle('active',i===current));
+  slides.forEach((slide,i)=>slide.setAttribute('aria-pressed',String(i===current)));
   const p=projects[current];title.textContent=p.title;desc.textContent=p.desc;
   const kicker=document.querySelector('.work-caption-kicker');kicker.innerHTML=p.kicker+' <span>•</span> '+(current===0?'WEBSITE DEMO':'SELECTED WORK');
   link.href=p.url;
@@ -521,11 +516,41 @@ html.js-motion .motion-reveal.is-visible{opacity:1;transform:translateY(0)}
   link.rel='noopener noreferrer';
  }
  function move(n){current=(current+n+slides.length)%slides.length;render()}
- document.querySelector('.work-prev').addEventListener('click',()=>move(-1));
- document.querySelector('.work-next').addEventListener('click',()=>move(1));
- dots.forEach((dot,i)=>dot.addEventListener('click',()=>{current=i;render()}));
- slides.forEach((slide,i)=>slide.addEventListener('click',()=>{if(!slide.classList.contains('work-active')){current=i;render()}}));
+ const autoplayDelay=6000;
+ let autoplayTimer=null;
+ function stopAutoplay(){
+  if(autoplayTimer!==null){clearInterval(autoplayTimer);autoplayTimer=null;}
+ }
+ function startAutoplay(){
+  stopAutoplay();
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  autoplayTimer=setInterval(()=>move(1),autoplayDelay);
+ }
+ slides.forEach((slide,i)=>{
+  slide.addEventListener('click',()=>{
+   if(i!==current){current=i;render();}
+   startAutoplay();
+  });
+  slide.addEventListener('keydown',event=>{
+   if((event.key==='Enter'||event.key===' ')&&i!==current){
+    event.preventDefault();current=i;render();startAutoplay();
+   }
+  });
+ });
+ const gallery=document.querySelector('.work-stage');
+ if(gallery){
+  gallery.addEventListener('mouseenter',stopAutoplay);
+  gallery.addEventListener('mouseleave',startAutoplay);
+  gallery.addEventListener('focusin',stopAutoplay);
+  gallery.addEventListener('focusout',event=>{
+   if(!gallery.contains(event.relatedTarget))startAutoplay();
+  });
+ }
+ document.addEventListener('visibilitychange',()=>{
+  if(document.hidden)stopAutoplay();else startAutoplay();
+ });
  render();
+ startAutoplay();
 })();
 </script>
 
