@@ -384,7 +384,7 @@ footer{padding:25px 0;color:#777;font-size:10px}
     <div class="work-caption-kicker">TECHNOPRENEURSHIP · 2027 <span>•</span> WEBSITE DEMO</div>
     <h4 id="workProjectTitle">ProjectBridge — Student Team Project Marketplace</h4>
     <p id="workProjectDescription">A marketplace concept connecting students with local businesses through project-based collaboration in marketing, business research, and digital operations. I developed the front-end prototype and its user experience.</p>
-    <a id="workProjectLink" class="work-project-link" href="https://projectbridge-woad.vercel.app/" target="_blank" rel="noopener noreferrer">View Website <span>↗</span></a>
+    <a id="workProjectLink" class="work-project-link" href="https://projectbridge-woad.vercel.app/" target="_blank" rel="noopener noreferrer">View Website</a>
   </div>
 
   <div class="cards work-other-projects">
@@ -516,7 +516,7 @@ html.js-motion .motion-reveal.is-visible{opacity:1;transform:translateY(0)}
   const p=projects[current];title.textContent=p.title;desc.textContent=p.desc;
   const kicker=document.querySelector('.work-caption-kicker');kicker.innerHTML=p.kicker+' <span>•</span> '+(current===0?'WEBSITE DEMO':'SELECTED WORK');
   link.href=p.url;
-  link.textContent=p.label+' ↗';
+  link.textContent=p.label;
   link.target=current===0?'_blank':'_self';
   link.rel='noopener noreferrer';
  }
