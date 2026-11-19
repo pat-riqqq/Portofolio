@@ -397,6 +397,17 @@ footer{padding:25px 0;color:#777;font-size:10px}
 }
 </style>
 
+
+<style id="four-project-carousel-support">
+.work-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateX(0) scale(.62) !important;
+  filter: blur(2px) brightness(.5) !important;
+}
+.work-side iframe { pointer-events: none; }
+</style>
+
 </head><body>
 <div class="nav-shell"><div class="wrap nav"><a class="brand" href="#home"><span class="mark">AS</span> ARIQ.ABRAR</a><nav><a href="#about">About</a><a href="#journey">Journey</a><a href="#work">Work</a><a href="#skills">Skills</a><a href="#awards">Awards</a><a href="#contact">Contact</a></nav><a class="hire" href="mailto:ariqabrarsofyan@mail.ugm.ac.id">Hire Me</a></div></div>
 <main class="wrap" id="home">
@@ -506,7 +517,32 @@ footer{padding:25px 0;color:#777;font-size:10px}
         </div>
       </article>
 
-      <article class="work-slide work-side work-right" data-project="chemical" role="button" tabindex="0" aria-label="Show Chemical Engineering project">
+
+      <article class="work-slide work-side work-right" data-project="fieldproof" role="button" tabindex="0" aria-label="Show FieldProof website project">
+        <div class="browser-frame">
+          <div class="browser-top">
+            <div class="browser-dots"><i></i><i></i><i></i></div>
+            <div class="browser-address"><span class="lock">●</span> field-proof-murex.vercel.app</div>
+          </div>
+          <div class="browser-screen">
+            <iframe
+              src="https://field-proof-murex.vercel.app/"
+              title="FieldProof live website preview"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="fullscreen"
+            ></iframe>
+            <div class="preview-fallback">
+              <span class="fallback-mark">FP</span>
+              <strong>FieldProof</strong>
+              <span>Turn your work into measurable proof</span>
+              <a href="https://field-proof-murex.vercel.app/" target="_blank" rel="noopener noreferrer">Open live website</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-slide work-side work-hidden" data-project="chemical" role="button" tabindex="0" aria-label="Show Chemical Engineering project">
         <div class="work-mini-art chemical-art">
           <span class="mini-kicker">ACADEMIC FOUNDATION · ONGOING</span>
           <div class="chem-orbit orbit-one"></div><div class="chem-orbit orbit-two"></div>
@@ -627,33 +663,39 @@ html.js-motion .motion-reveal.is-visible{opacity:1;transform:translateY(0)}
 <script>
 (function(){
  const slideMap=[...document.querySelectorAll('.work-slide')];
- const slideOrder=['projectbridge','uav','chemical'];
+ const slideOrder=['projectbridge','fieldproof','uav','chemical'];
  const slides=slideOrder.map(id=>slideMap.find(slide=>slide.dataset.project===id)).filter(Boolean);
  const title=document.getElementById('workProjectTitle');
  const desc=document.getElementById('workProjectDescription');
  const link=document.getElementById('workProjectLink');
  if(!slides.length)return;
  const projects=[
-  {title:'ProjectBridge — Student Team Project Marketplace',kicker:'TECHNOPRENEURSHIP · 2027',desc:'A marketplace concept connecting students with local businesses through project-based collaboration in marketing, business research, and digital operations. I developed the front-end prototype and its user experience.',url:'https://projectbridge-woad.vercel.app/',label:'View Live Project'},
-  {title:'UAV-Based Methane Leak Detection',kicker:'ENERGY · INNOVATION · 2026',desc:'A conceptual early warning system integrating UAV, GIS, and digital notification technologies to support methane leak detection in the oil and gas context.',url:'#awards',label:'View Awards'},
-  {title:'Chemical Engineering Studies',kicker:'ACADEMIC FOUNDATION · ONGOING',desc:'Building a foundation in chemistry, thermochemistry, chemical equilibrium, organic chemistry, and engineering problem-solving at Universitas Gadjah Mada.',url:'#journey',label:'Explore Journey'}
+  {title:'ProjectBridge — Student Team Project Marketplace',kicker:'TECHNOPRENEURSHIP · 2027',desc:'A marketplace concept connecting students with local businesses through project-based collaboration in marketing, business research, and digital operations. I developed the front-end prototype and its user experience.',url:'https://projectbridge-woad.vercel.app/',label:'View Live Project',external:true,demo:true},
+  {title:'FieldProof — Turn Your Work into Measurable Proof',kicker:'DIGITAL PLATFORM · WEBSITE DEMO',desc:'A digital platform focused on turning work into measurable, verifiable proof.',url:'https://field-proof-murex.vercel.app/',label:'View Live Project',external:true,demo:true},
+  {title:'UAV-Based Methane Leak Detection',kicker:'ENERGY · INNOVATION · 2026',desc:'A conceptual early warning system integrating UAV, GIS, and digital notification technologies to support methane leak detection in the oil and gas context.',url:'#awards',label:'View Awards',external:false,demo:false},
+  {title:'Chemical Engineering Studies',kicker:'ACADEMIC FOUNDATION · ONGOING',desc:'Building a foundation in chemistry, thermochemistry, chemical equilibrium, organic chemistry, and engineering problem-solving at Universitas Gadjah Mada.',url:'#journey',label:'Explore Journey',external:false,demo:false}
  ];
  let current=0;
  function render(){
   slides.forEach((slide,i)=>{
    const offset=(i-current+slides.length)%slides.length;
-   slide.classList.toggle('work-active',offset===0);
-   slide.classList.toggle('work-left',offset===slides.length-1);
-   slide.classList.toggle('work-right',offset===1);
-   slide.classList.toggle('work-side',offset!==0);
-   slide.style.zIndex=offset===0?'3':'1';
+   const isActive=offset===0;
+   const isLeft=offset===slides.length-1;
+   const isRight=offset===1;
+   const isVisible=isActive||isLeft||isRight;
+   slide.classList.toggle('work-active',isActive);
+   slide.classList.toggle('work-left',isLeft);
+   slide.classList.toggle('work-right',isRight);
+   slide.classList.toggle('work-side',!isActive);
+   slide.classList.toggle('work-hidden',!isVisible);
+   slide.style.zIndex=isActive?'3':(isVisible?'1':'0');
   });
   slides.forEach((slide,i)=>slide.setAttribute('aria-pressed',String(i===current)));
   const p=projects[current];title.textContent=p.title;desc.textContent=p.desc;
-  const kicker=document.querySelector('.work-caption-kicker');kicker.innerHTML=p.kicker+' <span>•</span> '+(current===0?'WEBSITE DEMO':'SELECTED WORK');
+  const kicker=document.querySelector('.work-caption-kicker');kicker.innerHTML=p.kicker+' <span>•</span> '+(p.demo?'WEBSITE DEMO':'SELECTED WORK');
   link.href=p.url;
   link.textContent=p.label;
-  link.target=current===0?'_blank':'_self';
+  link.target=p.external?'_blank':'_self';
   link.rel='noopener noreferrer';
  }
  function move(n){current=(current+n+slides.length)%slides.length;render()}
